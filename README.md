@@ -1,1 +1,1 @@
-# LetterBoxd
+# LetterBoxed
