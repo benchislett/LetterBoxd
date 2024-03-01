@@ -1,10 +1,21 @@
 import ext.TWL06.twl as twl
-import wordfreq
 import numpy as np
 import random
 import argparse
 
 maxdepth = 5
+
+try:
+    import wordfreq
+except ImportError:
+    print('Failed to import wordfreq library. Solutions will be returned in arbitrary order.')
+    wordfreq = None
+
+def word_frequency(w, lang):
+    if wordfreq is not None:
+        return wordfreq.word_frequency(w, lang)
+    else:
+        return 0.0
 
 def whereis(letter):
     for i in range(4):
@@ -107,7 +118,7 @@ if __name__ == '__main__':
         print('Score insufficient. Best: ', res[0])
     else:
         res = list(filter(lambda i: i[0] == 12, res))
-        scores = list(map(lambda s: min(map(lambda w: wordfreq.word_frequency(w, 'en'), s[1].strip().split(' '))), res))
+        scores = list(map(lambda s: min(map(lambda w: word_frequency(w, 'en'), s[1].strip().split(' '))), res))
         combo = sorted(zip(scores, res), reverse=True)
         for freq_score, (depth_score, coll) in combo[:10]:
             print(coll.strip())
