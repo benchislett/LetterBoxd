@@ -8,7 +8,7 @@ maxdepth = 5
 try:
     import wordfreq
 except ImportError:
-    print('Failed to import wordfreq library. Solutions will be returned in arbitrary order.')
+    print('Failed to import wordfreq library. Solutions will be shown in arbitrary order.')
     wordfreq = None
 
 def word_frequency(w, lang):
@@ -73,10 +73,14 @@ if __name__ == '__main__':
                     description='Computes optimal solutions for the NYT Word Game "Letterboxed"')
     parser.add_argument('letters', type=str, nargs='?',
                     help='A pattern of letters, optionally with dashes separating the sides of the box. For example ABC-DEF-GHI-JKL. If omitted, a random pattern is generated.')
+    parser.add_argument('banlist', type=str, nargs='*',
+                    help='Any words to be explicitly disallowed as candidate words. Helpful if the first attempt uses words that your wordlist does not allow.')
     args = parser.parse_args()
+
 
     global letters, all, options, validwords, connections, starters
 
+    banlist = args.banlist
     letters = args.letters
     if letters is None:
         all = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz', 12))
@@ -102,6 +106,7 @@ if __name__ == '__main__':
     results = list(filter(lambda x: x[0], [(*validate(word), word) for word in twl.iterator() if len(word) > 2]))
     endpositions = list(map(lambda x: x[1], results))
     validwords = list(map(lambda x: x[2], results))
+    validwords = list(filter(lambda x: x not in banlist, validwords))
 
     starters = simplify(validwords)
 
