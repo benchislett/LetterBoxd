@@ -88,6 +88,7 @@ if __name__ == '__main__':
     letters = letters.replace('-', ' ')
     letters = letters.replace('|', ' ')
     letters = letters.replace('/', ' ')
+    letters = letters.lower()
     all = letters.replace(' ', '')
     if ' ' not in letters:
         letters = [letters[0:3], letters[3:6], letters[6:9], letters[9:12]]
